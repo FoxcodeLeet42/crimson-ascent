@@ -2,27 +2,66 @@ import { useState, useRef, useEffect } from "react";
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
 
 const MusicPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.3);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const hasUserInteracted = useRef(false);
 
-  // Autoplay on mount
+  // Sync state with audio events
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
-    const playAudio = () => {
-      audio.play().catch(() => {});
-    };
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
 
-    // Delay to ensure audio is loaded
-    setTimeout(playAudio, 500);
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("playing", handlePlay);
+    audio.addEventListener("pause", handlePause);
+
+    return () => {
+      audio.removeEventListener("play", handlePlay);
+      audio.removeEventListener("playing", handlePlay);
+      audio.removeEventListener("pause", handlePause);
+    };
   }, []);
 
+  // Aggressive autoplay on mount
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const timer = setTimeout(() => {
+      if (hasUserInteracted.current) return;
+
+      audio.play().catch(() => {
+        // Autoplay blocked by browser. Add catch-all interaction listeners with capture: true
+        const tryPlay = () => {
+          if (hasUserInteracted.current) return;
+          audio.play().then(() => {
+            document.removeEventListener("click", tryPlay, true);
+            document.removeEventListener("keydown", tryPlay, true);
+            document.removeEventListener("touchstart", tryPlay, true);
+            document.removeEventListener("pointerdown", tryPlay, true);
+          }).catch(() => { });
+        };
+
+        // Adding listeners in the capture phase bypasses any stopPropagation
+        document.addEventListener("click", tryPlay, true);
+        document.addEventListener("keydown", tryPlay, true);
+        document.addEventListener("touchstart", tryPlay, true);
+        document.addEventListener("pointerdown", tryPlay, true);
+      });
+    }, 50);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Sync volume
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = isMuted ? 0 : volume;
@@ -30,13 +69,13 @@ const MusicPlayer = () => {
   }, [volume, isMuted]);
 
   const togglePlay = () => {
+    hasUserInteracted.current = true;
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play().catch(() => {});
+      audioRef.current.play().catch(() => { });
     }
-    setIsPlaying(!isPlaying);
   };
 
   // Track audio progress
@@ -70,13 +109,13 @@ const MusicPlayer = () => {
 
   return (
     <div className="w-full max-w-lg mx-auto">
-      <audio ref={audioRef} preload="metadata">
+      <audio ref={audioRef} preload="metadata" autoPlay>
         <source src="/mussulo.mp3" type="audio/mpeg" />
       </audio>
 
-      <div className="bg-card/60 backdrop-blur-md border border-border rounded-xl p-4">
-        <h4 className="font-display text-xs uppercase tracking-[0.3em] text-primary text-center mb-4">
-          Music Controller
+      <div className="bg-black/40 backdrop-blur-md border border-crimson/50 rounded-xl p-6 shadow-2xl">
+        <h4 className="font-display text-lg uppercase tracking-[0.3em] text-crimson-glow font-bold text-center mb-6">
+          CRIMSON RADIO
         </h4>
 
         {/* Track info */}
