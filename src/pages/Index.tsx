@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import bgImage from "@/assets/bg-cityscape.jpg";
 import Particles from "@/components/Particles";
 import MusicPlayer from "@/components/MusicPlayer";
@@ -108,7 +108,9 @@ const Index = () => {
       <ServerUpdates visible={showUpdates} />
 
       {/* Team Panel - right panel */}
-      {showTeam && <TeamPanel />}
+      <AnimatePresence>
+        {showTeam && <TeamPanel />}
+      </AnimatePresence>
 
       {/* Marquee text */}
       <MarqueeText />
