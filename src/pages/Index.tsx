@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import bgImage from "@/assets/bg-cityscape.jpg";
 import Particles from "@/components/Particles";
 import MusicPlayer from "@/components/MusicPlayer";
@@ -43,7 +43,7 @@ const Index = () => {
       <Particles />
 
       {/* Main Content - centered */}
-      <div className="relative z-20 flex flex-col items-center justify-center h-full px-8">
+      <div className="relative z-35 flex flex-col items-center justify-center h-full px-8">
         {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -108,7 +108,9 @@ const Index = () => {
       <ServerUpdates visible={showUpdates} />
 
       {/* Team Panel - right panel */}
-      {showTeam && <TeamPanel />}
+      <AnimatePresence>
+        {showTeam && <TeamPanel />}
+      </AnimatePresence>
 
       {/* Marquee text */}
       <MarqueeText />
