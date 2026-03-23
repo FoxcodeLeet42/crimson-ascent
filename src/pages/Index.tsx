@@ -86,10 +86,14 @@ const Index = () => {
             {showUpdates ? "Hide Updates" : "Show Updates"}
           </button>
           <button
-            onClick={() => { setShowUpdates(false); setShowTeam(false); }}
+            onClick={() => {
+              const allHidden = !showUpdates && !showTeam;
+              setShowUpdates(allHidden);
+              setShowTeam(allHidden);
+            }}
             className="px-5 py-2 font-ui text-xs uppercase tracking-widest border border-border rounded bg-secondary/50 text-secondary-foreground transition-all duration-300 hover:bg-secondary hover:border-primary/30"
           >
-            Hide All
+            {!showUpdates && !showTeam ? "Show All" : "Hide All"}
           </button>
           <button
             onClick={() => setShowTeam(!showTeam)}
