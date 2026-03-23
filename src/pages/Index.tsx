@@ -43,7 +43,7 @@ const Index = () => {
       <Particles />
 
       {/* Main Content - centered */}
-      <div className="relative z-20 flex flex-col items-center justify-center h-full px-8">
+      <div className="relative z-35 flex flex-col items-center justify-center h-full px-8">
         {/* Title */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
