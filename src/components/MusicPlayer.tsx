@@ -2,11 +2,26 @@ import { useState, useRef, useEffect } from "react";
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
 
 const MusicPlayer = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [volume, setVolume] = useState(0.3);
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  // Autoplay on mount
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const playAudio = () => {
+      audio.play().catch(() => {});
+    };
+
+    // Delay to ensure audio is loaded
+    setTimeout(playAudio, 500);
+  }, []);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -24,19 +39,39 @@ const MusicPlayer = () => {
     setIsPlaying(!isPlaying);
   };
 
-  // Simulate progress for demo
+  // Track audio progress
   useEffect(() => {
-    if (!isPlaying) return;
-    const interval = setInterval(() => {
-      setProgress((p) => (p >= 100 ? 0 : p + 0.5));
-    }, 300);
-    return () => clearInterval(interval);
-  }, [isPlaying]);
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateProgress = () => {
+      setCurrentTime(audio.currentTime);
+      setProgress((audio.currentTime / audio.duration) * 100);
+    };
+
+    const updateDuration = () => {
+      setDuration(audio.duration);
+    };
+
+    const handleEnded = () => {
+      setIsPlaying(false);
+    };
+
+    audio.addEventListener("timeupdate", updateProgress);
+    audio.addEventListener("loadedmetadata", updateDuration);
+    audio.addEventListener("ended", handleEnded);
+
+    return () => {
+      audio.removeEventListener("timeupdate", updateProgress);
+      audio.removeEventListener("loadedmetadata", updateDuration);
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, []);
 
   return (
     <div className="w-full max-w-lg mx-auto">
-      <audio ref={audioRef} loop preload="none">
-        <source src="" type="audio/mpeg" />
+      <audio ref={audioRef} preload="metadata">
+        <source src="/mussulo.mp3" type="audio/mpeg" />
       </audio>
 
       <div className="bg-card/60 backdrop-blur-md border border-border rounded-xl p-4">
@@ -54,7 +89,7 @@ const MusicPlayer = () => {
             <p className="font-body text-xs text-muted-foreground">Ambient</p>
           </div>
           <span className="font-ui text-xs text-muted-foreground ml-auto">
-            {Math.floor(progress * 1.6)}s / 160s
+            {Math.floor(currentTime)}s / {Math.floor(duration)}s
           </span>
         </div>
 

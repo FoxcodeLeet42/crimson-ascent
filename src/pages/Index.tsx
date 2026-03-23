@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import bgImage from "@/assets/bg-cityscape.jpg";
 import Particles from "@/components/Particles";
 import MusicPlayer from "@/components/MusicPlayer";
 import LoadingBar from "@/components/LoadingBar";
@@ -25,16 +24,17 @@ const Index = () => {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-background">
-      {/* Background Image with zoom */}
+      {/* Background Video */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={bgImage}
-          alt=""
-          className="w-full h-full object-cover animate-slow-zoom"
+        <video
+          autoPlay
+          muted
+          loop
+          className="w-full h-full object-cover"
           style={{ filter: "blur(2px) brightness(0.4)" }}
-          width={1920}
-          height={1080}
-        />
+        >
+          <source src="https://r2.fivemanage.com/Ujypl4eMPLkcI5yNx6G9g/CRIMSONRP(1).mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/60" />
       </div>
