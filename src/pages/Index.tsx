@@ -5,7 +5,8 @@ import Particles from "@/components/Particles";
 import MusicPlayer from "@/components/MusicPlayer";
 import LoadingBar from "@/components/LoadingBar";
 import TeamPanel from "@/components/TeamPanel";
-import ActionButtons from "@/components/ActionButtons";
+import ServerUpdates from "@/components/ServerUpdates";
+import MarqueeText from "@/components/MarqueeText";
 
 const LoadingDots = () => {
   const [dots, setDots] = useState("");
@@ -19,6 +20,9 @@ const LoadingDots = () => {
 };
 
 const Index = () => {
+  const [showUpdates, setShowUpdates] = useState(true);
+  const [showTeam, setShowTeam] = useState(true);
+
   return (
     <div className="relative w-screen h-screen overflow-hidden bg-background">
       {/* Background Image with zoom */}
@@ -31,7 +35,6 @@ const Index = () => {
           width={1920}
           height={1080}
         />
-        {/* Dark overlay with gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/60" />
       </div>
@@ -40,56 +43,83 @@ const Index = () => {
       <Particles />
 
       {/* Main Content - centered */}
-      <div className="relative z-20 flex flex-col items-center justify-center h-full px-8 pr-80">
+      <div className="relative z-20 flex flex-col items-center justify-center h-full px-8">
         {/* Title */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="font-display text-7xl md:text-8xl lg:text-9xl font-bold uppercase tracking-wider text-primary animate-pulse-glow select-none"
+          className="text-center mb-2"
         >
-          CRIMSON <span className="text-foreground">RP</span>
-        </motion.h1>
+          <p className="font-ui text-lg md:text-xl text-muted-foreground tracking-[0.4em] uppercase mb-2">
+            Welcome
+          </p>
+          <h1 className="font-display text-6xl md:text-7xl lg:text-8xl font-bold uppercase tracking-wider text-foreground animate-pulse-glow select-none leading-none">
+            YOUR GAME IS
+          </h1>
+          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold uppercase tracking-wider text-primary animate-pulse-glow select-none leading-none mt-1">
+            LOADING
+          </h1>
+        </motion.div>
 
-        {/* Welcome message */}
-        <motion.p
+        {/* Music Player - centered */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="font-ui text-lg md:text-xl text-muted-foreground tracking-[0.2em] uppercase mt-4 mb-2"
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="w-full max-w-lg mt-8"
         >
-          Welcome to Crimson Roleplay
-        </motion.p>
+          <MusicPlayer />
+        </motion.div>
 
-        {/* Loading text */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="font-body text-sm text-muted-foreground/70 mb-10"
-        >
-          Preparing your experience<LoadingDots />
-        </motion.p>
-
-        {/* Loading Bar */}
+        {/* Toggle buttons */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 1 }}
-          className="w-full max-w-md mb-10"
+          className="flex gap-3 mt-8"
         >
-          <LoadingBar />
+          <button
+            onClick={() => setShowUpdates(!showUpdates)}
+            className="px-5 py-2 font-ui text-xs uppercase tracking-widest border border-border rounded bg-secondary/50 text-secondary-foreground transition-all duration-300 hover:bg-secondary hover:border-primary/30"
+          >
+            {showUpdates ? "Hide Updates" : "Show Updates"}
+          </button>
+          <button
+            onClick={() => { setShowUpdates(false); setShowTeam(false); }}
+            className="px-5 py-2 font-ui text-xs uppercase tracking-widest border border-border rounded bg-secondary/50 text-secondary-foreground transition-all duration-300 hover:bg-secondary hover:border-primary/30"
+          >
+            Hide All
+          </button>
+          <button
+            onClick={() => setShowTeam(!showTeam)}
+            className="px-5 py-2 font-ui text-xs uppercase tracking-widest border border-border rounded bg-secondary/50 text-secondary-foreground transition-all duration-300 hover:bg-secondary hover:border-primary/30"
+          >
+            {showTeam ? "Hide Team" : "Show Team"}
+          </button>
         </motion.div>
-
-        {/* Action Buttons */}
-        <ActionButtons />
       </div>
 
-      {/* Team Panel */}
-      <TeamPanel />
+      {/* Server Updates - left panel */}
+      <ServerUpdates visible={showUpdates} />
 
-      {/* Music Player */}
-      <MusicPlayer />
+      {/* Team Panel - right panel */}
+      {showTeam && <TeamPanel />}
+
+      {/* Marquee text */}
+      <MarqueeText />
+
+      {/* Loading bar + percentage at bottom right */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 1.2 }}
+        className="fixed bottom-3 right-6 z-50 flex items-center gap-3"
+      >
+        <div className="w-48">
+          <LoadingBar />
+        </div>
+      </motion.div>
 
       {/* Bottom gradient line accent */}
       <div className="fixed bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent z-40" />
