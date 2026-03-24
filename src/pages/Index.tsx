@@ -31,7 +31,7 @@ const Index = () => {
           loop
           className="w-full h-full object-cover"
         >
-          <source src="https://r2.fivemanage.com/Ujypl4eMPLkcI5yNx6G9g/CRIMSONRP(1).mp4" type="video/mp4" />
+          <source src="https://r2.fivemanage.com/Ujypl4eMPLkcI5yNx6G9g/Untitleddesign.mp4" type="video/mp4" />
         </video>
       </div>
 
