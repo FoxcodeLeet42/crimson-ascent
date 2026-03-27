@@ -4,21 +4,29 @@ interface TeamMember {
   name: string;
   role: string;
   color: string;
+  image?: string;
 }
 
 const teamMembers: TeamMember[] = [
   { name: "DIEGO BLANCO", role: "CEO", color: "text-crimson-glow" },
-  { name: "MM3", role: "DEV LEAD", color: "text-neon-red" },
-
+  { name: "MM3", role: "DEV LEAD", color: "text-crimson-glow" },
+  { name: "LE M", role: "CO-OWNER", color: "text-orange-500", image: "/a_5ed938a89ea09f9146c68102479c7ee4.gif" },
+  // { name: "RAIIS", role: "SUPER-ADMIN", color: "text-yellow-500", image: "/a_c3104d723e78fbaab10d2f9cce305025.gif" },
+  // { name: "COLOMBO", role: "SUPER-ADMIN", color: "text-yellow-500", image: "/giphy.gif" },
+  // { name: "LFASI", role: "SUPER-ADMIN", color: "text-yellow-500", image: "/WhatsApp_Image_2026-03-27_at_14.42.04.jpeg" },
+  // { name: "BOUJMAA", role: "MODERATOR", color: "text-green-500", image: "/IMG_8558.png" },
 ];
 
 const roleOrder: Record<string, number> = {
-  CEO: 0, "DEV LEAD": 1, DIRECTOR: 2, STAFF: 3,
+  "SUPER-ADMIN": 3, CEO: 0, "CO-OWNER": 2, "DEV LEAD": 1, DIRECTOR: 5, STAFF: 6, "MODERATOR": 4,
 };
 
 const roleBadgeStyle: Record<string, string> = {
+  "SUPER-ADMIN": "bg-yellow-500/15 border-yellow-500/30 text-yellow-500",
   CEO: "bg-crimson-glow/20 border-crimson-glow/40 text-crimson-glow",
-  "DEV LEAD": "bg-neon-red/15 border-neon-red/30 text-neon-red",
+  "CO-OWNER": "bg-orange-500/15 border-orange-500/30 text-orange-500",
+  "DEV LEAD": "bg-crimson-glow/20 border-crimson-glow/40 text-crimson-glow",
+  // "MODERATOR": "bg-green-500/15 border-green-500/30 text-green-500",
   DIRECTOR: "bg-primary/15 border-primary/30 text-primary",
   STAFF: "bg-muted border-border text-muted-foreground",
 };
@@ -42,7 +50,7 @@ const TeamPanel = () => {
           <div className="h-px bg-gradient-to-r from-transparent via-crimson/50 to-transparent mt-3" />
         </div>
 
-        <div className="flex-1 overflow-y-auto relative scrollbar-hide pb-4">
+        <div className="flex-1 overflow-y-auto relative pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           <div className="sticky top-0 h-6 bg-gradient-to-b from-black/80 to-transparent z-10 pointer-events-none" />
 
           <div className="space-y-1">
@@ -53,7 +61,7 @@ const TeamPanel = () => {
               >
                 <div className="flex items-center gap-3">
                   <img
-                    src="/1.jpg"
+                    src={member.image || "/1.jpg"}
                     alt={member.name}
                     className="w-10 h-10 rounded border border-white/20 object-cover shadow-sm bg-black/60"
                   />

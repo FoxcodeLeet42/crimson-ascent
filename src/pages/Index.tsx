@@ -123,6 +123,9 @@ const Index = () => {
       {/* Marquee text */}
       <MarqueeText />
 
+      {/* Secret stamp */}
+      <span className="fixed bottom-2 left-3 text-[10px] text-gray-600/40 font-mono z-50 select-none pointer-events-none">K&D</span>
+
       {/* Bottom gradient line accent */}
       <div className="fixed bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent z-40" />
     </div>

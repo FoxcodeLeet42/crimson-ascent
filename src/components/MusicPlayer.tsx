@@ -110,7 +110,7 @@ const MusicPlayer = () => {
   return (
     <div className="w-full max-w-lg mx-auto">
       <audio ref={audioRef} preload="metadata" autoPlay>
-        <source src="/mussulo.mp3" type="audio/mpeg" />
+        <source src="/diego.mp3" type="audio/mpeg" />
       </audio>
 
       <div className="bg-black/40 backdrop-blur-md border border-crimson/50 rounded-xl p-6 shadow-2xl">
@@ -120,12 +120,11 @@ const MusicPlayer = () => {
 
         {/* Track info */}
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-12 h-12 rounded-lg bg-primary/20 border border-primary/30 flex items-center justify-center shrink-0">
-            <span className="text-primary text-lg">♪</span>
+          <div className="w-12 h-12 rounded-lg bg-black border border-primary/30 overflow-hidden flex items-center justify-center shrink-0">
+            <img src="/diego.webp" alt="French Montana x Max B - Ever Since U Left Me" className="w-full h-full object-cover" />
           </div>
           <div className="min-w-0">
-            <p className="font-ui text-sm text-foreground truncate">Crimson Nights</p>
-            <p className="font-body text-xs text-muted-foreground">Ambient</p>
+            <p className="font-ui text-sm text-foreground truncate">French Montana x Max B - Ever Since U Left Me</p>
           </div>
           <span className="font-ui text-xs text-muted-foreground ml-auto">
             {Math.floor(currentTime)}s / {Math.floor(duration)}s

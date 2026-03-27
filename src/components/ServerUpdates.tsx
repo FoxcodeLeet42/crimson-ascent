@@ -9,7 +9,7 @@ interface Update {
 
 const updates: Update[] = [
   {
-    version: "Version 1.0",
+    version: "SEASON 1",
     date: "LAUNCH DAY",
     description:
       "Welcome to the official launch of Crimson City! Step into a new era of immersive roleplay with custom scripts, dynamic storylines, and a mature, community-driven world. Your destiny begins here.",
